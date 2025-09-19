@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Digital Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f0f2f5;
+            color: #333;
+            scroll-behavior: smooth;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #fff;
+            text-align: center;
+            padding: 40px 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background: #333;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        nav a {
+            color: #fff;
+            margin: 0 20px;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #00bcd4;
+        }
+
+        /* Main Section */
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease;
+        }
+
+        section.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 {
+            color: #2575fc;
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+
+        /* About Section */
+        img.profile {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            border: 5px solid #2575fc;
+        }
+
+        /* Skills Section */
+        ul {
+            list-style: none;
+        }
+
+        ul li {
+            background: #e1f5fe;
+            margin: 8px 0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        ul li:hover {
+            background: #b3e5fc;
+            transform: translateX(5px);
+        }
+
+        /* Projects Section */
+        .projects {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .project {
+            background: #f9fbff;
+            border-left: 5px solid #2575fc;
+            padding: 20px;
+            border-radius: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .project h3 {
+            margin-bottom: 8px;
+            color: #6a11cb;
+        }
+
+        /* Multimedia */
+        audio, video {
+            width: 100%;
+            margin: 15px 0;
+            border-radius: 12px;
+            outline: none;
+        }
+
+        /* Contact Form */
+        form input, form textarea, form select {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+
+        form input:focus, form textarea:focus, form select:focus {
+            border-color: #2575fc;
+            box-shadow: 0 0 5px #2575fc;
+            outline: none;
+        }
+
+        form button {
+            background: #2575fc;
+            color: #fff;
+            font-weight: 700;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        form button:hover {
+            background: #6a11cb;
+            transform: scale(1.05);
+        }
+
+        /* Result message */
+        #message {
+            margin-top: 10px;
+            padding: 10px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        #message:hover {
+            background: #2575fc;
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 25px 0;
+            margin-top: 40px;
+        }
+
+        /* Responsive */
+        @media(max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            nav {
+                flex-direction: column;
+            }
+
+            nav a {
+                margin: 10px 0;
+            }
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Form submit
+            $("#loginForm").submit(function(e){
+                e.preventDefault();
+                let name = $("#name").val();
+                let message = name ? "Welcome, " + name + "!" : "Please enter your details.";
+                $("#message").text(message).css({
+                    color: name ? "green" : "red"
+                });
+            });
+
+            // Fade-in animation on scroll
+            const revealSections = () => {
+                $('section').each(function(){
+                    const top = $(this).offset().top;
+                    const scroll = $(window).scrollTop();
+                    const windowHeight = $(window).height();
+                    if(scroll + windowHeight - 100 > top){
+                        $(this).addClass('show');
+                    }
+                });
+            };
+
+            $(window).on('scroll', revealSections);
+            revealSections();
+        });
+    </script>
+</head>
+<body>
+
+    <header>
+        <h1>My Profile</h1>
+    </header>
+
+    <nav>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <main>
+        <!-- About Section -->
+        <section id="about">
+            <h2>About Me</h2>
+            <img src="passport austin.jpg" alt="Profile Picture" class="profile">
+            <p>Hello! My name is <strong>Austin Sajeev Abraham</strong>. I am a web developer passionate about creating interactive, modern, and responsive web pages. I enjoy learning new technologies and building projects that challenge me.</p>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills">
+            <h2>Skills</h2>
+            <ul>
+                <li>HTML5 & CSS3</li>
+                <li>JavaScript & jQuery</li>
+                <li>React & Frontend Development</li>
+                <li>Python & Backend Development</li>
+                <li>Machine Learning & Data Science</li>
+                <li>Flask / Node.js</li>
+            </ul>
+
+            <h3>Introduction Video</h3>
+            <video controls>
+                <source src="videotest.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+            <h3>Favorite Song</h3>
+            <audio controls>
+                <source src="audio.mp3" type="audio/mpeg">
+                Your browser does not support the audio tag.
+            </audio>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <h2>Projects</h2>
+            <div class="projects">
+                <div class="project">
+                    <h3>AI Chatbot</h3>
+                    <p>A chatbot that scrapes websites and answers questions using a local LLaMA3 model.</p>
+                </div>
+                <div class="project">
+                    <h3>Spam Email Classifier</h3>
+                    <p>Machine learning model to classify spam emails using Naive Bayes and scikit-learn.</p>
+                </div>
+                <div class="project">
+                    <h3>Student Result Portal</h3>
+                    <p>Full-stack portal using Flask and React for managing and displaying student results.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <h2>Contact Me</h2>
+            <form id="loginForm">
+                <input type="text" id="name" placeholder="Enter your name" required>
+                <input type="email" id="email" placeholder="Enter your email" required>
+                <textarea id="messageInput" placeholder="Your message here" rows="4" required></textarea>
+                <select>
+                    <option value="general">General Inquiry</option>
+                    <option value="project">Project Collaboration</option>
+                    <option value="job">Job Opportunity</option>
+                </select>
+                <button type="submit">Send Message</button>
+            </form>
+            <p id="message"></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Austin Sajeev Abraham</p>
+    </footer>
+
+</body>
+</html>
